@@ -47,8 +47,13 @@ class OpenAIChatClient:
 
     def __init__(self, settings: Settings):
         from openai import AsyncOpenAI  # imported lazily so mock mode needs no key
-        self._client = AsyncOpenAI(api_key=settings.openai_api_key.get_secret_value(),
-                                   timeout=settings.openai_timeout_seconds, max_retries=2)
+        self._client = AsyncOpenAI(
+    api_key=settings.openai_api_key.get_secret_value(),
+    base_url=settings.openai_base_url,
+    timeout=settings.openai_timeout_seconds,
+    max_retries=2
+)
+
         self.model = settings.openai_model
 
     async def chat(self, messages, tools, tool_choice="auto") -> AssistantMessage:

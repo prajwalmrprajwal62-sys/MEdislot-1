@@ -33,9 +33,9 @@ class Settings(BaseSettings):
 
     # OpenAI
     openai_api_key: SecretStr = SecretStr("")
-    openai_model: str = "gpt-4o-mini"
+    openai_base_url: str = "https://api.groq.com/openai/v1"
+    openai_model: str = "openai/gpt-oss-120b"
     openai_timeout_seconds: float = 20.0
-
     # telephony
     telephony_provider: str = "mock"  # mock | twilio
     twilio_account_sid: str = ""

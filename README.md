@@ -53,6 +53,31 @@ Open http://localhost:8000/docs (Swagger) and http://localhost:8000/health. `/he
 doctor list, availability only), mock telephony (JSON instead of a phone), mock email/SMS (logged, nothing sent).
 Real booking conversations need `OPENAI_API_KEY`.
 
+### Deploy the demo with Render
+
+The repository includes [`render.yaml`](./render.yaml), a Render Blueprint for a free web service. In Render,
+choose **New > Blueprint**, connect this repository, and apply the blueprint. Enter the values requested for the
+`sync: false` variables; secrets are intentionally not stored in this file.
+
+The service runs with:
+
+```text
+Build: pip install -r requirements.txt
+Start: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+After deployment, verify `/health` reports live HMS, Twilio telephony, Twilio SMS, and mock email. If Render assigns
+a different service URL than `https://medislot-demo.onrender.com`, update `PUBLIC_BASE_URL` to the exact deployed HTTPS
+URL and configure Twilio's inbound and status webhooks with that same URL:
+
+```text
+POST https://<deployed-host>/api/calls/inbound
+POST https://<deployed-host>/api/calls/status
+```
+
+The demo uses SQLite, which is not persistent on most free hosting plans. Use fictional/demo data only; a persistent
+database is required for production.
+
 ## 4. Run the tests
 ```powershell
 pytest -q
